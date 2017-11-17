@@ -25,7 +25,7 @@ public abstract class DataBaseConfigurationConnection {
 		}
 		
 		try{
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			con = DriverManager.getConnection("jdbc:mysql://"+local+":"+porta+"/"+parameterObject.dataBaseName, parameterObject.user , parameterObject.password);
 		}catch(Exception e){
 			System.out.println("Não foi possivel conectar");
