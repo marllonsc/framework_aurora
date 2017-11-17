@@ -12,7 +12,7 @@ public class P {
 	
 public static void main(String[] args){
 	P p1 = new P();	
-	Usuario user = new Usuario(1, null, "admin", null, "123456");
+//	Usuario user = new Usuario(1, null, "admin", null, "123456");
 	Usuario user2 = new Usuario(null, null, "admin", null, "admin");
 	
 	System.out.println(p1.m.retornaObjeto(user2));

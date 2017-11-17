@@ -93,7 +93,7 @@ public class Modelo extends BancoDados {
 									pi.getAtributos().elementAt(j)).equals(null)
 							&& !pi.returnValuesMethods(
 									pi.getAtributos().elementAt(j)).equals("")) {
-						valores = valores;
+//						valores = valores;
 						j = -2;
 					}
 				}
@@ -191,7 +191,7 @@ public class Modelo extends BancoDados {
 									pi.getAtributos().elementAt(j)).equals(null)
 							&& !pi.returnValuesMethods(
 									pi.getAtributos().elementAt(j)).equals("")) {
-						valores = valores;
+//						valores = valores;
 						j = -2;
 					}
 				}
