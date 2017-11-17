@@ -1,22 +1,22 @@
-package Persistencia;
+package framework.aurora.db.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import BD.BancoDados;
-import CasseInformation.PegarInformaion;
+import framework.aurora.db.conection.BancoDados;
+import framework.aurora.db.reflection.GetClassInformationReflection;
 
-public class Modelo extends BancoDados {
+public abstract class BaseDao extends BancoDados {
 
-	public Modelo(String local, String porta, String nomeBD, String usuario,
+	public BaseDao(String local, String porta, String nomeBD, String usuario,
 			String password) {
 		super(local, porta, nomeBD, usuario, password);
 	}
 
 	public Boolean inserirObjeto(Object objeto) {
 
-		PegarInformaion pi = new PegarInformaion(objeto);
+		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		String atributos = "";
 		String valores = "";
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
@@ -62,7 +62,7 @@ public class Modelo extends BancoDados {
 		String valores = "WHERE ";
 		String atributos = "";
 		Vector<Object> o = new Vector<Object>();
-		PegarInformaion pi = new PegarInformaion(objeto);
+		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
 			if (i < pi.getAtributos().size() - 1) {
 				atributos = atributos + pi.getAtributos().elementAt(i) + ",";
@@ -160,7 +160,7 @@ public class Modelo extends BancoDados {
 		String valores = "WHERE ";
 		String atributos = "";
 		Object o = new Object();
-		PegarInformaion pi = new PegarInformaion(objeto);
+		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
 			if (i < pi.getAtributos().size() - 1) {
 				atributos = atributos + pi.getAtributos().elementAt(i) + ",";
@@ -250,8 +250,8 @@ public class Modelo extends BancoDados {
 	public Boolean alterarObjetos(Object novo, Object velho){
 		String valores = "";
 		String atributos = "";
-		PegarInformaion pi = new PegarInformaion(novo);
-		PegarInformaion pi2 = new PegarInformaion(velho);
+		GetClassInformationReflection pi = new GetClassInformationReflection(novo);
+		GetClassInformationReflection pi2 = new GetClassInformationReflection(velho);
 		
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
 			if (i < pi.getAtributos().size() - 1) {
@@ -330,7 +330,7 @@ public class Modelo extends BancoDados {
 	public Boolean excluirObjetos(Object objeto){
 		String valores = "WHERE ";
 		String atributos = "";
-		PegarInformaion pi = new PegarInformaion(objeto);
+		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
 			if (i < pi.getAtributos().size() - 1) {
 				atributos = atributos + pi.getAtributos().elementAt(i) + ",";

@@ -1,21 +1,16 @@
-package Testes;
-
-import java.util.Vector;
-
-
-import Persistencia.Modelo;
+package framework.aurora.db.test;
 
 public class P {
 	
-	public Modelo m = new Modelo(null, null, "CRS", "root", "werewolf");
+//	public BaseDao m = new BaseDao(null, null, "CRS", "root", "werewolf");
 	
 	
 public static void main(String[] args){
-	P p1 = new P();	
+//	P p1 = new P();	
 //	Usuario user = new Usuario(1, null, "admin", null, "123456");
-	Usuario user2 = new Usuario(null, null, "admin", null, "admin");
+//	Usuario user2 = new Usuario(null, null, "admin", null, "admin");
 	
-	System.out.println(p1.m.retornaObjeto(user2));
+//	System.out.println(p1.m.retornaObjeto(user2));
 		
 		//p1.m.cadastrar(novo);
 		

@@ -1,4 +1,4 @@
-package BD;
+package framework.aurora.db.conection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

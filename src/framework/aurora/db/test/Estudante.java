@@ -1,4 +1,4 @@
-package Testes;
+package framework.aurora.db.test;
 
 public class Estudante{
 

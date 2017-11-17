@@ -1,48 +1,48 @@
-package CasseInformation;
+package framework.aurora.db.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
-public class PegarInformaion {
+public class GetClassInformationReflection {
 
-	private Object classe;
-	private String name;
-	private Vector<String> atributos;
-	private Vector<String> metodos;
+	private Object classObject;
+	private String className;
+	private Vector<String> attributes;
+	private Vector<String> methods;
 	
 
-	public PegarInformaion(Object classe) {
+	public GetClassInformationReflection(Object classe) {
 		super();
-		this.classe = classe;
-		this.name = classe.getClass().getSimpleName();
-		this.atributos = ReturnNameField(classe.getClass().getDeclaredFields());
+		this.classObject = classe;
+		this.className = classe.getClass().getSimpleName();
+		this.attributes = ReturnNameField(classe.getClass().getDeclaredFields());
 		//this.metodos = ReturnNameMethods(classe.getClass().getDeclaredMethods());
 	}
 
 	public Object getClasse() {
-		return classe;
+		return classObject;
 	}
 
 	public void setClasse(Object classe) {
-		this.classe = classe;
+		this.classObject = classe;
 	}
 
 	public String getName() {
-		return name;
+		return className;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.className = name;
 	}
 
 	public Vector<String> getAtributos() {
-		return atributos;
+		return attributes;
 	}
 
 	public void setAtributos(Vector<String> atributos) {
-		this.atributos = atributos;
+		this.attributes = atributos;
 	}
 	
 	private Vector<String> ReturnNameField(Field[] fields){
@@ -54,18 +54,18 @@ public class PegarInformaion {
 	}
 	
 	public Vector<String> getMetodos() {
-		return metodos;
+		return methods;
 	}
 
 	public void setMetodos(Vector<String> metodos) {
-		this.metodos = metodos;
+		this.methods = metodos;
 	}
 	
 	public Object returnValuesMethods(String atributo){
 		String tmp = atributo.substring(0,1).toUpperCase() + atributo.substring(1);
 		Method m = null;
 		try {
-			m = this.classe.getClass().getDeclaredMethod("get"+tmp);
+			m = this.classObject.getClass().getDeclaredMethod("get"+tmp);
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +74,7 @@ public class PegarInformaion {
 			e.printStackTrace();
 		}
 		try {
-			return m.invoke(this.classe);
+			return m.invoke(this.classObject);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,7 +94,7 @@ public class PegarInformaion {
 	    Method m = null;
 		try {
 			try {
-				m = this.classe.getClass().getDeclaredMethod("set"+tmp, classe.getClass().getDeclaredField(atributo).getType());
+				m = this.classObject.getClass().getDeclaredMethod("set"+tmp, classObject.getClass().getDeclaredField(atributo).getType());
 			} catch (NoSuchFieldException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
