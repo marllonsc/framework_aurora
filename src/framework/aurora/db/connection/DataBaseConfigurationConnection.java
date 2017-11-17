@@ -1,17 +1,21 @@
-package framework.aurora.db.conection;
+package framework.aurora.db.connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class Conexao {
+import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
+
+public abstract class DataBaseConfigurationConnection {
 
 	
 	private Connection con;
 
-	public Conexao(String local, String porta, String nomeBD ,String usuario, String password){
+	public DataBaseConfigurationConnection(DataBaseConfigurationConnectionParameter parameterObject){
 		
+		String porta = parameterObject.port;
+		String local = parameterObject.host;
 		if(local == null){
 			local = "localhost";
 		}
@@ -22,14 +26,14 @@ public abstract class Conexao {
 		
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			con = DriverManager.getConnection("jdbc:mysql://"+local+":"+porta+"/"+nomeBD, usuario , password);
+			con = DriverManager.getConnection("jdbc:mysql://"+local+":"+porta+"/"+parameterObject.dataBaseName, parameterObject.user , parameterObject.password);
 		}catch(Exception e){
 			System.out.println("Não foi possivel conectar");
 		}
 	}
 	
 	
-	protected boolean executarSQL(String sql){
+	protected boolean executeSQL(String sql){
 		boolean result = true;
 		 try{
 	
@@ -38,41 +42,41 @@ public abstract class Conexao {
 			st.close();
 		 }
 		 catch(Exception e) {
-			 System.out.println("Nao foi possivel executar SQL.");
 			 result = false;
 		 }
 		 return result;
 	}
 
 	
-	protected ResultSet executarBuscaSQL(String sql){
+	protected ResultSet executeSearchSQL(String sql){
 		try{
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(sql);
 			return rs;
 		 }
 		 catch(Exception e) {
-			System.out.println("Nao foi possível recuperar dados.");
 			return null;
 		 }
 		
 	}
 	
-	protected void setComitTrue() {
+	protected boolean setComitTrue() {
 		try {
 			con.setAutoCommit(true);
 			con.commit();
+			return true;
 		} catch (SQLException e) {
-			System.out.println("Erro ao setar verdadeiro no commit");
+			return false;
 		}
 	
 	}
 	
-	protected void setComitFalse() {
+	protected boolean setComitFalse() {
 		try {
 			con.setAutoCommit(false);
+			return true;
 		} catch (SQLException e) {
-			System.out.println("Erro ao setar verdadeiro no commit");
+			return false;
 		}
 	
 	} 

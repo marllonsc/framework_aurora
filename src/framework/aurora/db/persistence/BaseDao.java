@@ -4,17 +4,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import framework.aurora.db.conection.BancoDados;
+import framework.aurora.db.connection.DataBaseConfiguration;
 import framework.aurora.db.reflection.GetClassInformationReflection;
 
-public abstract class BaseDao extends BancoDados {
+public abstract class BaseDao extends DataBaseConfiguration {
 
 	public BaseDao(String local, String porta, String nomeBD, String usuario,
 			String password) {
 		super(local, porta, nomeBD, usuario, password);
 	}
 
-	public Boolean inserirObjeto(Object objeto) {
+	public Boolean insertObject(Object objeto) {
 
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		String atributos = "";
@@ -44,13 +44,13 @@ public abstract class BaseDao extends BancoDados {
 				+ ") values(" + valores + ")";
 
 		//System.out.println(sql);
-		return super.executarSql(sql);
+		return super.executeSql(sql);
 	}
 
-	public Boolean inserirObjetos(Vector<Object> objetos){
+	public Boolean insertsObjects(Vector<Object> objetos){
 		Boolean result = false;
 			for (int i = 0; i < objetos.size(); i++) {
-				result = inserirObjeto(objetos.elementAt(i));
+				result = insertObject(objetos.elementAt(i));
 				if(!result){
 					return result;
 				}
@@ -58,7 +58,7 @@ public abstract class BaseDao extends BancoDados {
 		return result;
 	} 
 	
-	public Vector<Object> retornaObjetos(Object objeto)    {                       
+	public Vector<Object> returnObjects(Object objeto)    {                       
 		String valores = "WHERE ";
 		String atributos = "";
 		Vector<Object> o = new Vector<Object>();
@@ -120,7 +120,7 @@ public abstract class BaseDao extends BancoDados {
 					+ valores;
 		}
 		//System.out.println(sql);
-		ResultSet Dadosusuarios = executarBuscaSQL(sql);
+		ResultSet Dadosusuarios = executeSearchSQL(sql);
 		if(Dadosusuarios != null){
 		try {
 			while (Dadosusuarios.next()) {
@@ -156,7 +156,7 @@ public abstract class BaseDao extends BancoDados {
 		return o;
 	}
 	
-	public Object retornaObjeto(Object objeto)    {                       
+	public Object returnObject(Object objeto)    {                       
 		String valores = "WHERE ";
 		String atributos = "";
 		Object o = new Object();
@@ -218,7 +218,7 @@ public abstract class BaseDao extends BancoDados {
 					+ valores;
 		}
 		//System.out.println(sql);
-		ResultSet Dadosusuarios = executarBuscaSQL(sql);
+		ResultSet Dadosusuarios = executeSearchSQL(sql);
 		if(Dadosusuarios != null){
 		try {
 			while (Dadosusuarios.next()) {
@@ -247,7 +247,7 @@ public abstract class BaseDao extends BancoDados {
 		return o;
 	}
 	
-	public Boolean alterarObjetos(Object novo, Object velho){
+	public Boolean updateObject(Object novo, Object velho){
 		String valores = "";
 		String atributos = "";
 		GetClassInformationReflection pi = new GetClassInformationReflection(novo);
@@ -324,10 +324,10 @@ public abstract class BaseDao extends BancoDados {
 		
 		String sql = "UPDATE " +pi.getName()+" SET "+valores+" WHERE "+atributos;
 		//System.out.println(sql);
-		return executarSql(sql);
+		return executeSql(sql);
 	}
 
-	public Boolean excluirObjetos(Object objeto){
+	public Boolean deleteObject(Object objeto){
 		String valores = "WHERE ";
 		String atributos = "";
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
@@ -378,15 +378,15 @@ public abstract class BaseDao extends BancoDados {
 		}
 		//System.out.println(sql);
 		
-		return executarSql(sql);
+		return executeSql(sql);
 	}
 	
-	public Boolean ComandoSql(String sql) {
-		return super.executarSql(sql);
+	public Boolean sqlCommand(String sql) {
+		return super.executeSql(sql);
 	}
 	
-	public ResultSet ComandoBuscaSql(String sql){
-		return super.executarBuscaSQL(sql);
+	public ResultSet sqlSearchCommand(String sql){
+		return super.executeSearchSQL(sql);
 	}
 
 }
