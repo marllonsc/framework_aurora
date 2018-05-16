@@ -14,8 +14,8 @@ public abstract class DataBaseConfigurationConnection {
 
 	public DataBaseConfigurationConnection(DataBaseConfigurationConnectionParameter parameterObject){
 		
-		String porta = parameterObject.port;
-		String local = parameterObject.host;
+		String porta = parameterObject.getPort();
+		String local = parameterObject.getHost();
 		if(local == null){
 			local = "localhost";
 		}
@@ -26,7 +26,7 @@ public abstract class DataBaseConfigurationConnection {
 		
 		try{
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-			con = DriverManager.getConnection("jdbc:mysql://"+local+":"+porta+"/"+parameterObject.dataBaseName, parameterObject.user , parameterObject.password);
+			con = DriverManager.getConnection("jdbc:mysql://"+local+":"+porta+"/"+parameterObject.getDataBaseName(), parameterObject.getUser() , parameterObject.getPassword());
 		}catch(Exception e){
 			System.out.println("Não foi possivel conectar");
 		}

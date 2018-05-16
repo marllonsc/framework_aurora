@@ -1,11 +1,15 @@
 package framework.aurora.db.parameters;
 
 public class DataBaseConfigurationConnectionParameter {
-	public String host;
-	public String port;
-	public String dataBaseName;
-	public String user;
-	public String password;
+
+	private String host;
+	private String port;
+	private String dataBaseName;
+	private String user;
+	private String password;
+
+	public DataBaseConfigurationConnectionParameter() {
+	}
 
 	public DataBaseConfigurationConnectionParameter(String host, String port, String dataBaseName, String user,
 			String password) {
@@ -15,4 +19,45 @@ public class DataBaseConfigurationConnectionParameter {
 		this.user = user;
 		this.password = password;
 	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getPort() {
+		return port;
+	}
+
+	public void setPort(String port) {
+		this.port = port;
+	}
+
+	public String getDataBaseName() {
+		return dataBaseName;
+	}
+
+	public void setDataBaseName(String dataBaseName) {
+		this.dataBaseName = dataBaseName;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 }
