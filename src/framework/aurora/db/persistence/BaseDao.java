@@ -14,7 +14,7 @@ public abstract class BaseDao extends DataBaseConfiguration {
 	 
 	public <T> BaseDao(Class<T> objectClass) {
 		super();
-		this.className = objectClass.getSimpleName();
+		this.setClassName(objectClass.getSimpleName());
 	}
 
 	public Boolean insertObject(Object objeto) {
@@ -311,6 +311,14 @@ public abstract class BaseDao extends DataBaseConfiguration {
 
 	public ResultSet sqlSearchCommand(String sql) {
 		return super.executeSearchSQL(sql);
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
 	}
 
 }

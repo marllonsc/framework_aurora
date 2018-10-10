@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
+import framework.aurora.db.tools.DataBaseEnum;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
 
@@ -49,7 +50,7 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 	private static DataBaseConfigurationConnectionParameter loadingConfiguration() {
 		List<String> valuesConf = readConfiguration();
 		if(valuesConf!= null && valuesConf.size() == 5) {
-			new DataBaseConfigurationConnectionParameter(valuesConf.get(0), valuesConf.get(1), valuesConf.get(2), valuesConf.get(3), valuesConf.get(4));
+			new DataBaseConfigurationConnectionParameter(DataBaseEnum.valueOf(valuesConf.get(0)),valuesConf.get(1), valuesConf.get(2), valuesConf.get(3), valuesConf.get(4), valuesConf.get(5));
 		}else {
 			return new DataBaseConfigurationConnectionParameter();
 		}

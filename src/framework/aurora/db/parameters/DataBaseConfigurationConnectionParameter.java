@@ -1,7 +1,10 @@
 package framework.aurora.db.parameters;
 
+import framework.aurora.db.tools.DataBaseEnum;
+
 public class DataBaseConfigurationConnectionParameter {
 
+	private DataBaseEnum dataBase;
 	private String host;
 	private String port;
 	private String dataBaseName;
@@ -11,8 +14,9 @@ public class DataBaseConfigurationConnectionParameter {
 	public DataBaseConfigurationConnectionParameter() {
 	}
 
-	public DataBaseConfigurationConnectionParameter(String host, String port, String dataBaseName, String user,
+	public DataBaseConfigurationConnectionParameter(DataBaseEnum dataBase, String host, String port, String dataBaseName, String user,
 			String password) {
+		this.dataBase = dataBase;
 		this.host = host;
 		this.port = port;
 		this.dataBaseName = dataBaseName;
@@ -59,5 +63,16 @@ public class DataBaseConfigurationConnectionParameter {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public DataBaseEnum getDataBase() {
+		return dataBase;
+	}
+
+	public void setDataBase(DataBaseEnum dataBase) {
+		this.dataBase = dataBase;
+	}
+	
+	
+
 
 }
