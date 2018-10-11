@@ -43,7 +43,7 @@ public abstract class DataBaseConfigurationConnection {
 		
 		if (DataBaseEnum.MY_SQL.equals(parameterObject.getDataBase())) {
 			return "com.mysql.cj.jdbc.Driver";
-		} else if (DataBaseEnum.MY_SQL.equals(parameterObject.getDataBase())) {
+		} else if (DataBaseEnum.POSTGRES.equals(parameterObject.getDataBase())) {
 			return "org.postgresql.Driver";
 		}
 		
@@ -55,7 +55,7 @@ public abstract class DataBaseConfigurationConnection {
 
 		if (DataBaseEnum.MY_SQL.equals(parameterObject.getDataBase())) {
 			return "3306";
-		} else if (DataBaseEnum.MY_SQL.equals(parameterObject.getDataBase())) {
+		} else if (DataBaseEnum.POSTGRES.equals(parameterObject.getDataBase())) {
 			return "5432";
 		}
 		

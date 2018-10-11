@@ -14,8 +14,10 @@ public class MakeUrlDb {
 		.append(":")
 		.append(conf.getPort())
 		.append("/")
-		.append(conf.getDataBaseName())
-		.append("?autoReconnect=true&useSSL=true");
+		.append(conf.getDataBaseName());
+		
+		if(DataBaseEnum.MY_SQL.equals(conf.getDataBase()))
+		url.append("?autoReconnect=true&useSSL=true");
 		
 		return url.toString();
 	}
