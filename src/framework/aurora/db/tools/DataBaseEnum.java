@@ -5,7 +5,7 @@ public enum DataBaseEnum {
 	MY_SQL("jdbc:mysql"),
     POSTGRES("jdbc:postgresql");
  
-    private String dataBase;
+    private final String dataBase;
  
     DataBaseEnum(String dataBase) {
         this.dataBase = dataBase;

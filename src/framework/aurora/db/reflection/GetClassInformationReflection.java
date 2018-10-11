@@ -3,6 +3,9 @@ package framework.aurora.db.reflection;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 public class GetClassInformationReflection {
@@ -74,7 +77,8 @@ public class GetClassInformationReflection {
 			e.printStackTrace();
 		}
 		try {
-			return m.invoke(this.classObject);
+			Object value = m.invoke(this.classObject);
+			return checkValue(value);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,10 +88,13 @@ public class GetClassInformationReflection {
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public Object setValuesMethods(String atributo, Object value,  Object o){
 		String tmp = atributo.substring(0,1).toUpperCase() + atributo.substring(1);
 		//String tmp2 = atributo.substring(0,1) + atributo.substring(1);
@@ -126,5 +133,18 @@ public class GetClassInformationReflection {
 		//	e.printStackTrace();
 		}
 		return null;
+	}
+	
+	
+//	convert(datetime,'01/12/2006',103)  yyyy-mm-dd hh:mm:ss
+	private Object checkValue(Object value) throws ParseException {
+		if(value instanceof Date) {
+			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
+			return "DATE '"+dt.format(value)+"'";
+		}else if(value instanceof String) {
+			return "'"+value+"'";
+		}else {
+			return value;
+		}
 	}
 }

@@ -7,13 +7,14 @@ import java.util.List;
 
 import framework.aurora.db.connection.DataBaseConfiguration;
 import framework.aurora.db.reflection.GetClassInformationReflection;
+import framework.aurora.db.tools.DataBaseEnum;
 
 public abstract class BaseDao extends DataBaseConfiguration {
 	
 	private String className;
 	 
-	public <T> BaseDao(Class<T> objectClass) {
-		super();
+	public <T> BaseDao(Class<T> objectClass, DataBaseEnum dataBase) {
+		super(dataBase);
 		this.setClassName(objectClass.getSimpleName());
 	}
 
@@ -28,10 +29,10 @@ public abstract class BaseDao extends DataBaseConfiguration {
 					&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals("")) {
 				if (i < pi.getAtributos().size() - 1) {
 					atributos = atributos + pi.getAtributos().elementAt(i) + ",";
-					valores = valores + "'" + pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "',";
+					valores = valores + pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + ",";
 				} else {
 					atributos = atributos + pi.getAtributos().elementAt(i);
-					valores = valores + "'" + pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					valores = valores + pi.returnValuesMethods(pi.getAtributos().elementAt(i));
 				}
 			}
 		}
@@ -63,8 +64,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 				if (pi.returnValuesMethods(pi.getAtributos().elementAt(i)) != null
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals(null)
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals("")) {
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
 					if (pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)) != null
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals(null)
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals("")
@@ -89,8 +90,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 					if (!valores.equalsIgnoreCase("WHERE ")) {
 						valores = valores + " AND ";
 					}
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
 				}
 			}
 		}
@@ -143,8 +144,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 				if (pi.returnValuesMethods(pi.getAtributos().elementAt(i)) != null
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals(null)
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals("")) {
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
 					if (pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)) != null
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals(null)
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals("")
@@ -169,8 +170,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 					if (!valores.equalsIgnoreCase("WHERE ")) {
 						valores = valores + " AND ";
 					}
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
 				}
 			}
 		}
@@ -219,8 +220,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 					if (!valores.equalsIgnoreCase("")) {
 						valores = valores + " ,";
 					}
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "' ";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + " ";
 				}
 			} else {
 				if (pi.returnValuesMethods(pi.getAtributos().elementAt(i)) != null
@@ -229,8 +230,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 					if (!valores.equalsIgnoreCase("")) {
 						valores = valores + " ,";
 					}
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "' ";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + " ";
 				}
 			}
 
@@ -244,8 +245,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 					if (!atributos.equalsIgnoreCase("")) {
 						atributos = atributos + " AND ";
 					}
-					atributos = atributos + pi2.getAtributos().elementAt(i) + " ='"
-							+ pi2.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					atributos = atributos + pi2.getAtributos().elementAt(i) + " = "
+							+ pi2.returnValuesMethods(pi.getAtributos().elementAt(i));
 				}
 			} else {
 				if (pi2.returnValuesMethods(pi2.getAtributos().elementAt(i)) != null
@@ -253,8 +254,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 					if (!atributos.equalsIgnoreCase("")) {
 						atributos = atributos + " AND ";
 					}
-					atributos = atributos + pi2.getAtributos().elementAt(i) + " ='"
-							+ pi2.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					atributos = atributos + pi2.getAtributos().elementAt(i) + " = "
+							+ pi2.returnValuesMethods(pi.getAtributos().elementAt(i));
 				}
 			}
 		}
@@ -270,12 +271,12 @@ public abstract class BaseDao extends DataBaseConfiguration {
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
 			if (i < pi.getAtributos().size() - 1) {
-				atributos = atributos + pi.getAtributos().elementAt(i) + ",";
+				atributos = atributos + pi.getAtributos().elementAt(i);
 				if (pi.returnValuesMethods(pi.getAtributos().elementAt(i)) != null
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals(null)
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals("")) {
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
 					if (pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)) != null
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals(null)
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals("")) {
@@ -290,8 +291,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 				if (pi.returnValuesMethods(pi.getAtributos().elementAt(i)) != null
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals(null)
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals("")) {
-					valores = valores + pi.getAtributos().elementAt(i) + " ='"
-							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i)) + "'";
+					valores = valores + pi.getAtributos().elementAt(i) + " = "
+							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
 				}
 			}
 		}

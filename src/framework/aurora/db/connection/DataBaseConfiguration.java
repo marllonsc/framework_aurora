@@ -12,10 +12,10 @@ import framework.aurora.db.tools.DataBaseEnum;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
 
-	private static String path = "./DbConfiguration/connectionInformation.txt";
+	private static String path = "./DbConfiguration/dbInfoConexao.properties";
 
-	public DataBaseConfiguration() {
-		super(loadingConfiguration());
+	public DataBaseConfiguration(DataBaseEnum dataBase) {
+		super(loadingConfiguration(dataBase));
 	}
 
 	protected boolean executeSql(String sql) {
@@ -47,13 +47,12 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 
 	}
 	
-	private static DataBaseConfigurationConnectionParameter loadingConfiguration() {
+	private static  DataBaseConfigurationConnectionParameter loadingConfiguration(DataBaseEnum dataBase) {
 		List<String> valuesConf = readConfiguration();
 		if(valuesConf!= null && valuesConf.size() == 5) {
-			new DataBaseConfigurationConnectionParameter(DataBaseEnum.valueOf(valuesConf.get(0)),valuesConf.get(1), valuesConf.get(2), valuesConf.get(3), valuesConf.get(4), valuesConf.get(5));
+			return new DataBaseConfigurationConnectionParameter(dataBase,valuesConf.get(0), valuesConf.get(1), valuesConf.get(2), valuesConf.get(3), valuesConf.get(4));
 		}else {
 			return new DataBaseConfigurationConnectionParameter();
 		}
-		return new DataBaseConfigurationConnectionParameter();
 	}
 }
