@@ -5,20 +5,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import framework.aurora.db.connection.DataBaseConfiguration;
 import framework.aurora.db.reflection.GetClassInformationReflection;
 import framework.aurora.db.tools.DataBaseEnum;
 
-public abstract class BaseDao extends DataBaseConfiguration {
+public class BaseDao<T> extends DataBaseConfiguration {
 	
 	private String className;
+	
+	private T t;
 	 
-	public <T> BaseDao(Class<T> objectClass, DataBaseEnum dataBase) {
+	
+	public BaseDao(DataBaseEnum dataBase, Class<?> clazz) {
 		super(dataBase);
-		this.setClassName(objectClass.getSimpleName());
+		this.setClassName(clazz.getSimpleName());
+		newInstance(clazz);
 	}
 
-	public Boolean insertObject(Object objeto) {
+
+	public Boolean insertObject(T objeto) {
 
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		String atributos = "";
@@ -42,7 +49,7 @@ public abstract class BaseDao extends DataBaseConfiguration {
 		return super.executeSql(sql);
 	}
 
-	public Boolean insertsObjects(List<Object> objetos) {
+	public Boolean insertsObjects(List<T> objetos) {
 		Boolean result = false;
 		for (int i = 0; i < objetos.size(); i++) {
 			result = insertObject(objetos.get(i));
@@ -53,10 +60,11 @@ public abstract class BaseDao extends DataBaseConfiguration {
 		return result;
 	}
 
-	public List<Object> returnObjects(Object objeto) {
+	@SuppressWarnings("unchecked")
+	public List<T> returnObjects(T objeto) {
 		String valores = "WHERE ";
 		String atributos = "";
-		List<Object> o = new ArrayList<Object>();
+		List<T> o = new ArrayList<T>();
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
 			if (i < pi.getAtributos().size() - 1) {
@@ -105,16 +113,16 @@ public abstract class BaseDao extends DataBaseConfiguration {
 		if (Dadosusuarios != null) {
 			try {
 				while (Dadosusuarios.next()) {
-
+					
 					for (int i = 0; i < pi.getAtributos().size(); i++) {
 						atributos = pi.getAtributos().elementAt(i);
-						objeto = pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto);
+						objeto = ((T) pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto));
 						// atributos = "";
 
 					}
 					o.add(objeto);
 					objeto = null;
-					objeto = pi.getClasse().getClass().newInstance();
+					objeto = ((T) pi.getClasse().getClass().newInstance());
 				}
 
 			} catch (SQLException e) {
@@ -133,7 +141,8 @@ public abstract class BaseDao extends DataBaseConfiguration {
 		return  o;
 	}
 
-	public Object returnObject(Object objeto) {
+	@SuppressWarnings("unchecked")
+	public T returnObject(T objeto) {
 		String valores = "WHERE ";
 		String atributos = "";
 		Object o = new Object();
@@ -188,7 +197,7 @@ public abstract class BaseDao extends DataBaseConfiguration {
 
 					for (int i = 0; i < pi.getAtributos().size(); i++) {
 						atributos = pi.getAtributos().elementAt(i);
-						objeto = pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto);
+						objeto = ((T) pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto));
 						// atributos = "";
 
 					}
@@ -203,10 +212,10 @@ public abstract class BaseDao extends DataBaseConfiguration {
 			return null;
 		}
 
-		return o;
+		return (T) o;
 	}
 
-	public Boolean updateObject(Object novo, Object velho) {
+	public Boolean updateObject(T novo, T velho) {
 		String valores = "";
 		String atributos = "";
 		GetClassInformationReflection pi = new GetClassInformationReflection(novo);
@@ -265,7 +274,7 @@ public abstract class BaseDao extends DataBaseConfiguration {
 		return executeSql(sql);
 	}
 
-	public Boolean deleteObject(Object objeto) {
+	public Boolean deleteObject(T objeto) {
 		String valores = "WHERE ";
 		String atributos = "";
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
@@ -314,6 +323,133 @@ public abstract class BaseDao extends DataBaseConfiguration {
 		return super.executeSearchSQL(sql);
 	}
 
+	
+	public Boolean insertObject(String fields, String valores) {
+		String sql = "";
+		
+		sql = "insert into " + getClassName() + "(" + fields + ") values(" + valores + ")";
+		
+		return sqlCommand(sql);
+		
+	}
+
+	public List<T> returnAll(){
+		return returnObjects(t);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> returnObjects(String fields, String where) {
+		
+		T objeto = ((T) new Object());
+		String valores = "WHERE ";
+		String atributos = "";
+		List<T> o = new ArrayList<T>();
+		
+		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
+		
+		if(StringUtils.isBlank(fields)) {
+			fields = "*";
+		}
+		
+		String sql = "SELECT " + fields + " FROM " + getClassName()  + " ";
+		
+		if(StringUtils.isNotBlank(where)) {
+			sql = sql + valores + where;
+		}
+		
+		
+		ResultSet Dadosusuarios = executeSearchSQL(sql);
+		if (Dadosusuarios != null) {
+			try {
+				while (Dadosusuarios.next()) {
+					
+					for (int i = 0; i < pi.getAtributos().size(); i++) {
+						atributos = pi.getAtributos().elementAt(i);
+						objeto = ((T) pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto));
+					}
+					o.add(objeto);
+					objeto = null;
+					objeto = ((T) pi.getClasse().getClass().newInstance());
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			return null;
+		}
+
+		
+		return  o;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public T returnObject(String fields, String where) {
+		
+		T objeto = ((T) new Object());
+		String valores = "WHERE ";
+		String atributos = "";
+		T o = ((T) new Object());
+		
+		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
+		
+		if(StringUtils.isBlank(fields)) {
+			fields = "*";
+		}
+		
+		String sql = "SELECT " + fields + " FROM " + getClassName()  + " ";
+		
+		if(StringUtils.isNotBlank(where)) {
+			sql = sql + valores + where;
+		}
+		
+		
+		ResultSet Dadosusuarios = executeSearchSQL(sql);
+		if (Dadosusuarios != null) {
+			try {
+				while (Dadosusuarios.next()) {
+
+					for (int i = 0; i < pi.getAtributos().size(); i++) {
+						atributos = pi.getAtributos().elementAt(i);
+						objeto = ((T) pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto));
+
+					}
+					o = objeto;
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			return null;
+		}
+
+		return (T) o;
+		
+	}
+	
+	public Boolean updateObject(String setFilds, String where) {
+		String sql = "UPDATE " + getClassName() + " SET " + setFilds;
+		if (StringUtils.isNotBlank(where)) {
+			sql = sql + " WHERE " + where;
+		}
+		return sqlCommand(sql);
+	}
+	
+	public Boolean deleteObject(String where) {
+		String sql = "DELETE FROM " + getClassName();
+		if (StringUtils.isNotBlank(where)) {
+			sql = sql + " WHERE " + where;
+		}
+		return sqlCommand(sql);
+	}
+	
 	public String getClassName() {
 		return className;
 	}
@@ -321,5 +457,27 @@ public abstract class BaseDao extends DataBaseConfiguration {
 	public void setClassName(String className) {
 		this.className = className;
 	}
+
+	public T getT() {
+		return t;
+	}
+
+	public void setT(T t) {
+		this.t = t;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void newInstance(Class<?> clazz) {
+		try {
+			t = (T) clazz.newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 }
