@@ -14,8 +14,8 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 
 	private static String path = "./DbConfiguration/dbInfoConexao.properties";
 
-	public DataBaseConfiguration(DataBaseEnum dataBase) {
-		super(loadingConfiguration(dataBase));
+	public DataBaseConfiguration(DataBaseEnum dataBase, String serviceNameOracle) {
+		super(loadingConfiguration(dataBase), serviceNameOracle);
 	}
 
 	protected boolean executeSql(String sql) {

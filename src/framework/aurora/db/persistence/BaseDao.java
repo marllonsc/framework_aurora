@@ -18,8 +18,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	private T t;
 	 
 	
-	public BaseDao(DataBaseEnum dataBase, Class<?> clazz) {
-		super(dataBase);
+	public BaseDao(DataBaseEnum dataBase,String serviceNameOracle, Class<?> clazz) {
+		super(dataBase, serviceNameOracle);
 		this.setClassName(clazz.getSimpleName());
 		newInstance(clazz);
 	}

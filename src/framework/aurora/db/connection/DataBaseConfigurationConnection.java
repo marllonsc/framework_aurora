@@ -14,7 +14,7 @@ public abstract class DataBaseConfigurationConnection {
 
 	private Connection con;
 
-	public DataBaseConfigurationConnection(DataBaseConfigurationConnectionParameter parameterObject) {
+	public DataBaseConfigurationConnection(DataBaseConfigurationConnectionParameter parameterObject, String serviceNameOracle) {
 
 		String porta = parameterObject.getPort();
 		String local = parameterObject.getHost();
@@ -32,10 +32,10 @@ public abstract class DataBaseConfigurationConnection {
 
 			Class.forName(putDriver(parameterObject)).newInstance();
 
-			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject), parameterObject.getUser(),
+			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject, serviceNameOracle), parameterObject.getUser(),
 					parameterObject.getPassword());
 		} catch (Exception e) {
-			System.out.println("NÃ£o foi possivel conectar");
+			System.out.println("Não foi possivel conectar");
 		}
 	}
 
@@ -43,6 +43,8 @@ public abstract class DataBaseConfigurationConnection {
 		
 		if (DataBaseEnum.MY_SQL.equals(parameterObject.getDataBase())) {
 			return "com.mysql.cj.jdbc.Driver";
+		} else if (DataBaseEnum.ORACLE.equals(parameterObject.getDataBase())) {
+			return "oracle.jdbc.driver.OracleDriver";
 		} else if (DataBaseEnum.POSTGRES.equals(parameterObject.getDataBase())) {
 			return "org.postgresql.Driver";
 		}
@@ -55,6 +57,8 @@ public abstract class DataBaseConfigurationConnection {
 
 		if (DataBaseEnum.MY_SQL.equals(parameterObject.getDataBase())) {
 			return "3306";
+		} else if (DataBaseEnum.ORACLE.equals(parameterObject.getDataBase())) {
+			return "1521";
 		} else if (DataBaseEnum.POSTGRES.equals(parameterObject.getDataBase())) {
 			return "5432";
 		}
