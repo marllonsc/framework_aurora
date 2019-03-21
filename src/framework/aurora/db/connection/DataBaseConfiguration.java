@@ -1,6 +1,7 @@
 package framework.aurora.db.connection;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
 import framework.aurora.db.tools.DataBaseEnum;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
+	
 
 	private static String path = "./src/DbConfiguration/dbInfoConexao.properties";
 
@@ -27,6 +29,10 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 	}
 
 	private static List<String> readConfiguration() {
+		
+		if(!checkFileExist(path)) {
+		searchDirectory(new File("../"), "dbInfoConexao.properties");
+		}
 
 		try {
 			FileReader gravador = new FileReader(path);
@@ -47,6 +53,11 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 
 	}
 	
+	private static boolean checkFileExist(String path) {
+		File file = new File(path);
+		return file.exists();
+	}
+
 	private static  DataBaseConfigurationConnectionParameter loadingConfiguration(DataBaseEnum dataBase) {
 		List<String> valuesConf = readConfiguration();
 		if(valuesConf!= null && valuesConf.size() == 5) {
@@ -55,4 +66,44 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 			return new DataBaseConfigurationConnectionParameter();
 		}
 	}
+	
+	private static void searchDirectory(File directory, String fileNameToSearch) {
+
+
+		if (directory.isDirectory()) {
+		    search(directory, fileNameToSearch);
+		} else {
+		    System.out.println(directory.getAbsoluteFile() + " is not a directory!");
+		}
+
+	  }
+	
+	private static List<String> search(File file, String filename) {
+
+		if (file.isDirectory()) {
+		  System.out.println("Searching directory ... " + file.getAbsoluteFile());
+		  List<String> result = new ArrayList<String>();
+			
+		    if (file.canRead()) {
+			for (File temp : file.listFiles()) {
+			    if (temp.isDirectory()) {
+				search(temp, filename);
+			    } else {
+				if (filename.equals(temp.getName())) {			
+				    result.add(temp.getAbsoluteFile().toString());
+				    path = temp.getAbsoluteFile().toString();
+				    return result;
+			    }
+
+			}
+		    }
+
+		 } else {
+			System.out.println(file.getAbsoluteFile() + "Permission Denied");
+		 }
+		}
+		return null;
+	}
+	
+	
 }
