@@ -12,7 +12,7 @@ import framework.aurora.db.tools.DataBaseEnum;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
 
-	private static String path = "./DbConfiguration/dbInfoConexao.properties";
+	private static String path = "./src/DbConfiguration/dbInfoConexao.properties";
 
 	public DataBaseConfiguration(DataBaseEnum dataBase, String serviceNameOracle) {
 		super(loadingConfiguration(dataBase), serviceNameOracle);
