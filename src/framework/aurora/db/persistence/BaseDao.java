@@ -23,6 +23,14 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		this.setClassName(clazz.getSimpleName());
 		newInstance(clazz);
 	}
+	
+	private void posClose(ResultSet rs) {
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 
 	public Boolean insertObject(T objeto) {
@@ -131,6 +139,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
+			}finally {
+				posClose(Dadosusuarios);
 			}
 
 		} else {
@@ -206,6 +216,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}finally {
+				posClose(Dadosusuarios);
 			}
 
 		} else {
@@ -319,6 +331,13 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		return super.executeSql(sql);
 	}
 
+	/**
+	 * Necessario fechar a connexão 
+	 * 
+	 * @param args
+	 * 
+	 * @throws Exception lancada
+	 */
 	public ResultSet sqlSearchCommand(String sql) {
 		return super.executeSearchSQL(sql);
 	}

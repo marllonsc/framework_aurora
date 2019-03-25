@@ -84,7 +84,6 @@ public abstract class DataBaseConfigurationConnection {
 		try {
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(sql);
-			st.close();
 			return rs;
 		} catch (Exception e) {
 			return null;
