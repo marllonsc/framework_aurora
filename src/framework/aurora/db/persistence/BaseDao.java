@@ -27,6 +27,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	private void posClose(ResultSet rs) {
 		try {
 			rs.close();
+			System.out.println("Conexao Fechada!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
