@@ -35,7 +35,8 @@ public abstract class DataBaseConfigurationConnection {
 			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject, serviceNameOracle), parameterObject.getUser(),
 					parameterObject.getPassword());
 		} catch (Exception e) {
-			System.out.println("Não foi possivel conectar");
+			System.out.println("Database Connection Error!");
+			e.printStackTrace();
 		}
 	}
 

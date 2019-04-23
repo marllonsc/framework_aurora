@@ -80,16 +80,12 @@ public class GetClassInformationReflection {
 			Object value = m.invoke(this.classObject);
 			return checkValue(value);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -103,14 +99,11 @@ public class GetClassInformationReflection {
 			try {
 				m = this.classObject.getClass().getDeclaredMethod("set"+tmp, classObject.getClass().getDeclaredField(atributo).getType());
 			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -120,17 +113,11 @@ public class GetClassInformationReflection {
 			//o = o.getClass().newInstance();
 			return o;
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		//} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-		//	e.printStackTrace();
 		}
 		return null;
 	}

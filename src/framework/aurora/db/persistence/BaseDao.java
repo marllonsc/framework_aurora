@@ -27,7 +27,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	private void posClose(ResultSet rs) {
 		try {
 			rs.close();
-			System.out.println("Conexao Fechada!");
+			System.out.println("connection closed!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -333,11 +333,11 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	}
 
 	/**
-	 * Necessario fechar a connexão 
+	 * Necessary closed the Connection.
 	 * 
 	 * @param args
 	 * 
-	 * @throws Exception lancada
+	 * @throws Exception 
 	 */
 	public ResultSet sqlSearchCommand(String sql) {
 		return super.executeSearchSQL(sql);
@@ -491,10 +491,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		try {
 			t = (T) clazz.newInstance();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
