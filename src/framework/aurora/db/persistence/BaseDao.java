@@ -12,18 +12,20 @@ import framework.aurora.db.reflection.GetClassInformationReflection;
 import framework.aurora.db.tools.DataBaseEnum;
 
 public class BaseDao<T> extends DataBaseConfiguration {
-	
+
 	private String className;
-	
+
 	private T t;
-	 
-	
-	public BaseDao(DataBaseEnum dataBase,String serviceNameOracle, Class<?> clazz) {
+
+	private Class<?> _clazz;
+
+	public BaseDao(DataBaseEnum dataBase, String serviceNameOracle, Class<?> clazz) {
 		super(dataBase, serviceNameOracle);
 		this.setClassName(clazz.getSimpleName());
 		newInstance(clazz);
+		this._clazz = clazz;
 	}
-	
+
 	private void posClose(ResultSet rs) {
 		try {
 			rs.close();
@@ -32,7 +34,6 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			e.printStackTrace();
 		}
 	}
-
 
 	public Boolean insertObject(T objeto) {
 
@@ -122,7 +123,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		if (Dadosusuarios != null) {
 			try {
 				while (Dadosusuarios.next()) {
-					
+
 					for (int i = 0; i < pi.getAtributos().size(); i++) {
 						atributos = pi.getAtributos().elementAt(i);
 						objeto = ((T) pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto));
@@ -140,7 +141,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-			}finally {
+			} finally {
 				posClose(Dadosusuarios);
 			}
 
@@ -148,8 +149,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			return null;
 		}
 
-		
-		return  o;
+		return o;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -217,7 +217,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}finally {
+			} finally {
 				posClose(Dadosusuarios);
 			}
 
@@ -332,57 +332,85 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		return super.executeSql(sql);
 	}
 
-	/**
-	 * Necessary closed the Connection.
-	 * 
-	 * @param args
-	 * 
-	 * @throws Exception 
-	 */
-	public ResultSet sqlSearchCommand(String sql) {
-		return super.executeSearchSQL(sql);
-	}
-
-	
-	public Boolean insertObject(String fields, String valores) {
-		String sql = "";
-		
-		sql = "insert into " + getClassName() + "(" + fields + ") values(" + valores + ")";
-		
-		return sqlCommand(sql);
-		
-	}
-
-	public List<T> returnAll(){
-		return returnObjects(t);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<T> returnObjects(String fields, String where) {
-		
-		T objeto = ((T) new Object());
-		String valores = "WHERE ";
-		String atributos = "";
+	public List<T> sqlSearchCommand(String sql) {
+		GetClassInformationReflection pi = new GetClassInformationReflection(this._clazz);
 		List<T> o = new ArrayList<T>();
-		
-		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
-		
-		if(StringUtils.isBlank(fields)) {
-			fields = "*";
-		}
-		
-		String sql = "SELECT " + fields + " FROM " + getClassName()  + " ";
-		
-		if(StringUtils.isNotBlank(where)) {
-			sql = sql + valores + where;
-		}
-		
-		
+		o = this.resultSetToListObject(this.t, o, pi, sql);
+		return o;
+	}
+
+	private List<T> resultSetToListObject(T objeto, List<T> o, GetClassInformationReflection pi, String sql) {
+		String atributos;
 		ResultSet Dadosusuarios = executeSearchSQL(sql);
 		if (Dadosusuarios != null) {
 			try {
 				while (Dadosusuarios.next()) {
-					
+
+					for (int i = 0; i < pi.getAtributos().size(); i++) {
+						atributos = pi.getAtributos().elementAt(i);
+						objeto = ((T) pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto));
+					}
+					o.add(objeto);
+					objeto = null;
+					objeto = ((T) pi.getClasse().getClass().newInstance());
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} finally {
+				posClose(Dadosusuarios);
+			}
+
+		} else {
+			posClose(Dadosusuarios);
+			return null;
+		}
+
+		return o;
+	}
+
+	public Boolean insertObject(String fields, String valores) {
+		String sql = "";
+
+		sql = "insert into " + getClassName() + "(" + fields + ") values(" + valores + ")";
+
+		return sqlCommand(sql);
+
+	}
+
+	public List<T> returnAll() {
+		return returnObjects(t);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<T> returnObjects(String fields, String where) {
+
+		T objeto = ((T) new Object());
+		String valores = "WHERE ";
+		String atributos = "";
+		List<T> o = new ArrayList<T>();
+
+		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
+
+		if (StringUtils.isBlank(fields)) {
+			fields = "*";
+		}
+
+		String sql = "SELECT " + fields + " FROM " + getClassName() + " ";
+
+		if (StringUtils.isNotBlank(where)) {
+			sql = sql + valores + where;
+		}
+
+		ResultSet Dadosusuarios = executeSearchSQL(sql);
+		if (Dadosusuarios != null) {
+			try {
+				while (Dadosusuarios.next()) {
+
 					for (int i = 0; i < pi.getAtributos().size(); i++) {
 						atributos = pi.getAtributos().elementAt(i);
 						objeto = ((T) pi.setValuesMethods(atributos, Dadosusuarios.getObject(i + 1), objeto));
@@ -404,31 +432,29 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			return null;
 		}
 
-		
-		return  o;
+		return o;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public T returnObject(String fields, String where) {
-		
+
 		T objeto = ((T) new Object());
 		String valores = "WHERE ";
 		String atributos = "";
 		T o = ((T) new Object());
-		
+
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
-		
-		if(StringUtils.isBlank(fields)) {
+
+		if (StringUtils.isBlank(fields)) {
 			fields = "*";
 		}
-		
-		String sql = "SELECT " + fields + " FROM " + getClassName()  + " ";
-		
-		if(StringUtils.isNotBlank(where)) {
+
+		String sql = "SELECT " + fields + " FROM " + getClassName() + " ";
+
+		if (StringUtils.isNotBlank(where)) {
 			sql = sql + valores + where;
 		}
-		
-		
+
 		ResultSet Dadosusuarios = executeSearchSQL(sql);
 		if (Dadosusuarios != null) {
 			try {
@@ -451,9 +477,9 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		}
 
 		return (T) o;
-		
+
 	}
-	
+
 	public Boolean updateObject(String setFilds, String where) {
 		String sql = "UPDATE " + getClassName() + " SET " + setFilds;
 		if (StringUtils.isNotBlank(where)) {
@@ -461,7 +487,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		}
 		return sqlCommand(sql);
 	}
-	
+
 	public Boolean deleteObject(String where) {
 		String sql = "DELETE FROM " + getClassName();
 		if (StringUtils.isNotBlank(where)) {
@@ -469,7 +495,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		}
 		return sqlCommand(sql);
 	}
-	
+
 	public String getClassName() {
 		return className;
 	}
@@ -485,7 +511,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	public void setT(T t) {
 		this.t = t;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void newInstance(Class<?> clazz) {
 		try {
@@ -496,6 +522,5 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			e.printStackTrace();
 		}
 	}
-	
 
 }
