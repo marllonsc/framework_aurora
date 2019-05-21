@@ -9,23 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
-import framework.aurora.db.tools.DataBaseEnum;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
 	
 
 	private static String path = "./src/DbConfiguration/dbInfoConexao.properties";
 
-	public DataBaseConfiguration(DataBaseEnum dataBase, String serviceNameOracle) {
-		super(loadingConfiguration(dataBase), serviceNameOracle);
+	public DataBaseConfiguration() {
+		super(loadingConfiguration());
 	}
 
-	protected boolean executeSql(String sql) {
-		return super.executeSQL(sql);
+	protected boolean executeSQL(String sql) {
+		return super.executeSQL(sql,reconnect());
 	}
 
-	protected ResultSet executeSearchSql(String sql) {
-		return super.executeSearchSQL(sql);
+	protected ResultSet executeSearchSQL(String sql) {
+		return super.executeSearchSQL(sql,reconnect());
 	}
 
 	private static List<String> readConfiguration() {
@@ -58,10 +57,10 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 		return file.exists();
 	}
 
-	private static  DataBaseConfigurationConnectionParameter loadingConfiguration(DataBaseEnum dataBase) {
+	private static  DataBaseConfigurationConnectionParameter loadingConfiguration() {
 		List<String> valuesConf = readConfiguration();
-		if(valuesConf!= null && valuesConf.size() == 5) {
-			return new DataBaseConfigurationConnectionParameter(dataBase,valuesConf.get(0), valuesConf.get(1), valuesConf.get(2), valuesConf.get(3), valuesConf.get(4));
+		if(valuesConf!= null && valuesConf.size() == 6) {
+			return new DataBaseConfigurationConnectionParameter(valuesConf.get(0),valuesConf.get(1), valuesConf.get(2), valuesConf.get(3), valuesConf.get(4), valuesConf.get(5));
 		}else {
 			return new DataBaseConfigurationConnectionParameter();
 		}
@@ -105,5 +104,11 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 		return null;
 	}
 	
+	private DataBaseConfigurationConnectionParameter reconnect() {
+		if(!checkConnection()) {
+			return loadingConfiguration();
+		}
+		return new DataBaseConfigurationConnectionParameter();
+	}
 	
 }

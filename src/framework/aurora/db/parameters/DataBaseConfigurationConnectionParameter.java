@@ -14,14 +14,25 @@ public class DataBaseConfigurationConnectionParameter {
 	public DataBaseConfigurationConnectionParameter() {
 	}
 
-	public DataBaseConfigurationConnectionParameter(DataBaseEnum dataBase, String host, String port, String dataBaseName, String user,
+	public DataBaseConfigurationConnectionParameter(String dataBase, String host, String port, String dataBaseName, String user,
 			String password) {
-		this.dataBase = dataBase;
+		setDataBaseEnum(dataBase);
 		this.host = host;
 		this.port = port;
 		this.dataBaseName = dataBaseName;
 		this.user = user;
 		this.password = password;
+	}
+
+	private void setDataBaseEnum(String dataBase) {
+		if("MY_SQL".equalsIgnoreCase(dataBase)){
+			this.dataBase = DataBaseEnum.MY_SQL;
+		}else if("ORACLE".equalsIgnoreCase(dataBase)) {
+			this.dataBase = DataBaseEnum.ORACLE;
+		}else if("POSTGRES".equalsIgnoreCase(dataBase)) {
+			this.dataBase = DataBaseEnum.POSTGRES;
+		}
+		
 	}
 
 	public String getHost() {

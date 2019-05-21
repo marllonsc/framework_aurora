@@ -12,10 +12,15 @@ import framework.aurora.db.tools.MakeUrlDb;
 
 public abstract class DataBaseConfigurationConnection {
 
-	private Connection con;
+	private static Connection con;
 
-	public DataBaseConfigurationConnection(DataBaseConfigurationConnectionParameter parameterObject, String serviceNameOracle) {
+	private boolean checkconnection;
 
+	public DataBaseConfigurationConnection(DataBaseConfigurationConnectionParameter parameterObject) {
+		createConnection(parameterObject);
+	}
+
+	private void createConnection(DataBaseConfigurationConnectionParameter parameterObject) {
 		String porta = parameterObject.getPort();
 		String local = parameterObject.getHost();
 
@@ -32,16 +37,17 @@ public abstract class DataBaseConfigurationConnection {
 
 			Class.forName(putDriver(parameterObject)).newInstance();
 
-			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject, serviceNameOracle), parameterObject.getUser(),
+			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject), parameterObject.getUser(),
 					parameterObject.getPassword());
+			this.checkconnection = true;
 		} catch (Exception e) {
+			this.checkconnection = false;
 			System.out.println("Database Connection Error!");
-			e.printStackTrace();
 		}
 	}
 
 	private String putDriver(DataBaseConfigurationConnectionParameter parameterObject) {
-		
+
 		if (DataBaseEnum.MY_SQL.equals(parameterObject.getDataBase())) {
 			return "com.mysql.cj.jdbc.Driver";
 		} else if (DataBaseEnum.ORACLE.equals(parameterObject.getDataBase())) {
@@ -49,10 +55,9 @@ public abstract class DataBaseConfigurationConnection {
 		} else if (DataBaseEnum.POSTGRES.equals(parameterObject.getDataBase())) {
 			return "org.postgresql.Driver";
 		}
-		
+
 		return null;
 	}
-
 
 	private String putPort(DataBaseConfigurationConnectionParameter parameterObject) {
 
@@ -63,26 +68,32 @@ public abstract class DataBaseConfigurationConnection {
 		} else if (DataBaseEnum.POSTGRES.equals(parameterObject.getDataBase())) {
 			return "5432";
 		}
-		
+
 		return null;
 
 	}
 
-	protected boolean executeSQL(String sql) {
+	protected boolean executeSQL(String sql, DataBaseConfigurationConnectionParameter parameterObject) {
 		boolean result = true;
 		try {
-
+			if (!checkConnection()) {
+				createConnection(parameterObject);
+			}
 			Statement st = con.createStatement();
 			st.execute(sql);
 			st.close();
+			con.close();
 		} catch (Exception e) {
 			result = false;
 		}
 		return result;
 	}
 
-	protected ResultSet executeSearchSQL(String sql) {
+	protected ResultSet executeSearchSQL(String sql, DataBaseConfigurationConnectionParameter parameterObject) {
 		try {
+			if (!checkConnection()) {
+				createConnection(parameterObject);
+			}
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(sql);
 			return rs;
@@ -111,6 +122,10 @@ public abstract class DataBaseConfigurationConnection {
 			return false;
 		}
 
+	}
+
+	protected boolean checkConnection() {
+		return checkconnection;
 	}
 
 }

@@ -5,12 +5,12 @@ import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
 public class MakeUrlDb {
 	
 	
-	public static String geturldb(DataBaseConfigurationConnectionParameter conf,  String serviceNameOracle) {
+	public static String geturldb(DataBaseConfigurationConnectionParameter conf) {
 		
 		StringBuffer url = new StringBuffer();
 		
 		if(DataBaseEnum.ORACLE.equals(conf.getDataBase())) {
-			return "jdbc:oracle:thin:@"+conf.getHost()+":"+conf.getPort()+":"+serviceNameOracle;	
+			return "jdbc:oracle:thin:@"+conf.getHost()+":"+conf.getPort()+":"+conf.getDataBaseName();	
 		}else {
 		url.append(conf.getDataBase().getDataBase())
 		.append("://")

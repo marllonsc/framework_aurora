@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import framework.aurora.db.connection.DataBaseConfiguration;
 import framework.aurora.db.reflection.GetClassInformationReflection;
-import framework.aurora.db.tools.DataBaseEnum;
 
 public class BaseDao<T> extends DataBaseConfiguration {
 
@@ -19,8 +18,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 	private Class<?> _clazz;
 
-	public BaseDao(DataBaseEnum dataBase, String serviceNameOracle, Class<?> clazz) {
-		super(dataBase, serviceNameOracle);
+	public BaseDao(Class<?> clazz) {
+		super();
 		this.setClassName(clazz.getSimpleName());
 		newInstance(clazz);
 		this._clazz = clazz;
@@ -56,7 +55,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		String sql = "insert into " + pi.getName() + "(" + atributos + ") values(" + valores + ")";
 
 		// System.out.println(sql);
-		return super.executeSql(sql);
+		return super.executeSQL(sql);
 	}
 
 	public Boolean insertsObjects(List<T> objetos) {
@@ -284,7 +283,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 		String sql = "UPDATE " + pi.getName() + " SET " + valores + " WHERE " + atributos;
 		// System.out.println(sql);
-		return executeSql(sql);
+		return executeSQL(sql);
 	}
 
 	public Boolean deleteObject(T objeto) {
@@ -325,11 +324,11 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		}
 		// System.out.println(sql);
 
-		return executeSql(sql);
+		return executeSQL(sql);
 	}
 
 	public Boolean sqlCommand(String sql) {
-		return super.executeSql(sql);
+		return super.executeSQL(sql);
 	}
 
 	public List<T> sqlSearchCommand(String sql) {
@@ -339,6 +338,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		return o;
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<T> resultSetToListObject(T objeto, List<T> o, GetClassInformationReflection pi, String sql) {
 		String atributos;
 		ResultSet Dadosusuarios = executeSearchSQL(sql);
