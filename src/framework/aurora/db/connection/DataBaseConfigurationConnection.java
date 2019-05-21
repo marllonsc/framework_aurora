@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Timer;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
+import framework.aurora.db.tools.AgendadorCloseConnection;
 import framework.aurora.db.tools.DataBaseEnum;
 import framework.aurora.db.tools.MakeUrlDb;
 
@@ -36,13 +38,17 @@ public abstract class DataBaseConfigurationConnection {
 		try {
 
 			Class.forName(putDriver(parameterObject)).newInstance();
-
+	
 			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject), parameterObject.getUser(),
 					parameterObject.getPassword());
 			this.checkconnection = true;
 		} catch (Exception e) {
 			this.checkconnection = false;
 			System.out.println("Database Connection Error!");
+		}finally {
+			 Timer timer = new Timer();
+	         AgendadorCloseConnection agendador = new AgendadorCloseConnection(con);
+	         timer.schedule(agendador, 0, 30000);
 		}
 	}
 

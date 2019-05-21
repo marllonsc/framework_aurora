@@ -42,7 +42,7 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 			while ((linha = entrada.readLine()) != null) {
 				valuesConf.add(linha);
 			}
-			System.out.println("Configuration found!");
+//			System.out.println("Configuration found!");
 			entrada.close();
 			return valuesConf;
 		} catch (IOException e) {
@@ -80,7 +80,7 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 	private static List<String> search(File file, String filename) {
 
 		if (file.isDirectory()) {
-		  System.out.println("Searching directory ... " + file.getAbsoluteFile());
+//		  System.out.println("Searching directory ... " + file.getAbsoluteFile());
 		  List<String> result = new ArrayList<String>();
 			
 		    if (file.canRead()) {
