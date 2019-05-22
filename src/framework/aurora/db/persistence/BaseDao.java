@@ -25,14 +25,14 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		this._clazz = clazz;
 	}
 
-	private void posClose(ResultSet rs) {
-		try {
-			rs.close();
+//	private void posClose(ResultSet rs) {
+//		try {
+//			rs.close();
 //			System.out.println("connection closed!");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public Boolean insertObject(T objeto) {
 
@@ -140,8 +140,6 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-			} finally {
-				posClose(Dadosusuarios);
 			}
 
 		} else {
@@ -216,9 +214,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 			} catch (SQLException e) {
 				e.printStackTrace();
-			} finally {
-				posClose(Dadosusuarios);
-			}
+			} 
 
 		} else {
 			return null;
@@ -361,15 +357,9 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-			} finally {
-				posClose(Dadosusuarios);
-			}
+			} 
 
-		} else {
-			posClose(Dadosusuarios);
-			return null;
-		}
-
+		} 
 		return o;
 	}
 

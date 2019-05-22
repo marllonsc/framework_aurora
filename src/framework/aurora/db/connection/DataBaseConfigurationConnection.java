@@ -9,6 +9,7 @@ import java.util.Timer;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
 import framework.aurora.db.tools.AgendadorCloseConnection;
+import framework.aurora.db.tools.CloseConnectionSearch;
 import framework.aurora.db.tools.DataBaseEnum;
 import framework.aurora.db.tools.MakeUrlDb;
 
@@ -38,17 +39,17 @@ public abstract class DataBaseConfigurationConnection {
 		try {
 
 			Class.forName(putDriver(parameterObject)).newInstance();
-	
+
 			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject), parameterObject.getUser(),
 					parameterObject.getPassword());
 			this.checkconnection = true;
 		} catch (Exception e) {
 			this.checkconnection = false;
 			System.out.println("Database Connection Error!");
-		}finally {
-			 Timer timer = new Timer();
-	         AgendadorCloseConnection agendador = new AgendadorCloseConnection(con);
-	         timer.schedule(agendador, 0, 30000);
+		} finally {
+			Timer timer = new Timer();
+			AgendadorCloseConnection agendador = new AgendadorCloseConnection(con);
+			timer.schedule(agendador, 0, 30000);
 		}
 	}
 
@@ -96,15 +97,21 @@ public abstract class DataBaseConfigurationConnection {
 	}
 
 	protected ResultSet executeSearchSQL(String sql, DataBaseConfigurationConnectionParameter parameterObject) {
+		Statement st = null;
+		ResultSet rs = null;
 		try {
 			if (!checkConnection()) {
 				createConnection(parameterObject);
 			}
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
 			return rs;
 		} catch (Exception e) {
 			return null;
+		} finally {
+			Timer timer = new Timer();
+			CloseConnectionSearch agendador = new CloseConnectionSearch(st, rs);
+			timer.schedule(agendador, 0, 30000);
 		}
 
 	}
