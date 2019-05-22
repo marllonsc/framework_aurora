@@ -105,6 +105,10 @@ public abstract class DataBaseConfigurationConnection {
 			return rs;
 		} catch (Exception e) {
 			return null;
+		}finally {
+			 Timer timer = new Timer();
+	         AgendadorCloseConnection agendador = new AgendadorCloseConnection(con);
+	         timer.schedule(agendador, 0, 30000);
 		}
 
 	}
