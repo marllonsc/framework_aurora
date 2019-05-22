@@ -1,17 +1,14 @@
 package framework.aurora.db.connection;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
+import framework.aurora.db.tools.LeituraXML;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
-	
 
 	private static String path = "./src/DbConfiguration/dbInfoConexao.properties";
 
@@ -20,95 +17,98 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 	}
 
 	protected boolean executeSQL(String sql) {
-		return super.executeSQL(sql,reconnect());
+		return super.executeSQL(sql, reconnect());
 	}
 
 	protected ResultSet executeSearchSQL(String sql) {
-		return super.executeSearchSQL(sql,reconnect());
+		return super.executeSearchSQL(sql, reconnect());
 	}
 
-	private static List<String> readConfiguration() {
+	private static DataBaseConfigurationConnectionParameter loadingConfiguration() {
+		return readConfiguration();
+	}
+
+	private static DataBaseConfigurationConnectionParameter readConfiguration() {
+
+		if (!checkFileExist(path)) {
+			searchDirectory(new File("../"), "dbInfoConexao.xml");
+		}
 		
-		if(!checkFileExist(path)) {
-		searchDirectory(new File("../"), "dbInfoConexao.properties");
-		}
-
 		try {
-			FileReader gravador = new FileReader(path);
-			BufferedReader entrada = new BufferedReader(gravador);
-			List<String> valuesConf = new ArrayList<>();
-			
-			String linha;
-			while ((linha = entrada.readLine()) != null) {
-				valuesConf.add(linha);
-			}
-//			System.out.println("Configuration found!");
-			entrada.close();
-			return valuesConf;
-		} catch (IOException e) {
+			return LeituraXML.returnConfurationXML(path);
+		} catch (Exception e) {
 			System.out.println("Configuration not found!");
-			return null;
+			e.printStackTrace();
+			return new DataBaseConfigurationConnectionParameter();
 		}
+		
+
+//		try {
+//			FileReader gravador = new FileReader(path);
+//			BufferedReader entrada = new BufferedReader(gravador);
+//			List<String> valuesConf = new ArrayList<>();
+//
+//			String linha;
+//			while ((linha = entrada.readLine()) != null) {
+//				valuesConf.add(linha);
+//			}
+//			System.out.println("Configuration found!");
+//			entrada.close();
+//			return valuesConf;
+//		} catch (IOException e) {
+//			System.out.println("Configuration not found!");
+//			return null;
+//		}
 
 	}
-	
+
 	private static boolean checkFileExist(String path) {
 		File file = new File(path);
 		return file.exists();
 	}
 
-	private static  DataBaseConfigurationConnectionParameter loadingConfiguration() {
-		List<String> valuesConf = readConfiguration();
-		if(valuesConf!= null && valuesConf.size() == 6) {
-			return new DataBaseConfigurationConnectionParameter(valuesConf.get(0),valuesConf.get(1), valuesConf.get(2), valuesConf.get(3), valuesConf.get(4), valuesConf.get(5));
-		}else {
-			return new DataBaseConfigurationConnectionParameter();
-		}
-	}
-	
 	private static void searchDirectory(File directory, String fileNameToSearch) {
 
-
 		if (directory.isDirectory()) {
-		    search(directory, fileNameToSearch);
+			search(directory, fileNameToSearch);
 		} else {
-		    System.out.println(directory.getAbsoluteFile() + " is not a directory!");
+			System.out.println(directory.getAbsoluteFile() + " is not a directory!");
 		}
 
-	  }
-	
+	}
+
 	private static List<String> search(File file, String filename) {
 
 		if (file.isDirectory()) {
 //		  System.out.println("Searching directory ... " + file.getAbsoluteFile());
-		  List<String> result = new ArrayList<String>();
-			
-		    if (file.canRead()) {
-			for (File temp : file.listFiles()) {
-			    if (temp.isDirectory()) {
-				search(temp, filename);
-			    } else {
-				if (filename.equals(temp.getName())) {			
-				    result.add(temp.getAbsoluteFile().toString());
-				    path = temp.getAbsoluteFile().toString();
-				    return result;
-			    }
+			List<String> result = new ArrayList<String>();
 
+			if (file.canRead()) {
+				for (File temp : file.listFiles()) {
+					if (temp.isDirectory()) {
+						search(temp, filename);
+					} else {
+						if (filename.equals(temp.getName())) {
+							result.add(temp.getAbsoluteFile().toString());
+							path = temp.getAbsoluteFile().toString();
+							return result;
+						}
+
+					}
+				}
+
+			} else {
+				System.out.println(file.getAbsoluteFile() + "Permission Denied");
 			}
-		    }
-
-		 } else {
-			System.out.println(file.getAbsoluteFile() + "Permission Denied");
-		 }
 		}
 		return null;
 	}
-	
+
 	private DataBaseConfigurationConnectionParameter reconnect() {
-		if(!checkConnection()) {
+		if (!checkConnection()) {
 			return loadingConfiguration();
 		}
 		return new DataBaseConfigurationConnectionParameter();
 	}
-	
+
 }
