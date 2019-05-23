@@ -18,7 +18,6 @@ public class LeituraXML {
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
 		
-		
 		String dataBase = doc.getElementsByTagName("DATABASE").item(0).getTextContent();
 		String host = doc.getElementsByTagName("HOST").item(0).getTextContent();
 		String port = doc.getElementsByTagName("PORT").item(0).getTextContent();
