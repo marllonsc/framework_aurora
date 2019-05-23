@@ -13,7 +13,7 @@ public class LeituraXML {
 	
 	
 	public static DataBaseConfigurationConnectionParameter returnConfurationXML(String file) throws Exception{
-		File fXmlFile = new File("arquivo.xml");
+		File fXmlFile = new File(file);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
