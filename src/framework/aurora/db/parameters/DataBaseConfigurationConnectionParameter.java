@@ -10,29 +10,31 @@ public class DataBaseConfigurationConnectionParameter {
 	private String dataBaseName;
 	private String user;
 	private String password;
+	private Integer closeConnection;
 
 	public DataBaseConfigurationConnectionParameter() {
 	}
 
-	public DataBaseConfigurationConnectionParameter(String dataBase, String host, String port, String dataBaseName, String user,
-			String password) {
+	public DataBaseConfigurationConnectionParameter(String dataBase, String host, String port, String dataBaseName,
+			String user, String password, Integer closeConnection) {
 		setDataBaseEnum(dataBase);
 		this.host = host;
 		this.port = port;
 		this.dataBaseName = dataBaseName;
 		this.user = user;
 		this.password = password;
+		this.closeConnection = closeConnection;
 	}
 
 	private void setDataBaseEnum(String dataBase) {
-		if("MY_SQL".equalsIgnoreCase(dataBase)){
+		if ("MY_SQL".equalsIgnoreCase(dataBase)) {
 			this.dataBase = DataBaseEnum.MY_SQL;
-		}else if("ORACLE".equalsIgnoreCase(dataBase)) {
+		} else if ("ORACLE".equalsIgnoreCase(dataBase)) {
 			this.dataBase = DataBaseEnum.ORACLE;
-		}else if("POSTGRES".equalsIgnoreCase(dataBase)) {
+		} else if ("POSTGRES".equalsIgnoreCase(dataBase)) {
 			this.dataBase = DataBaseEnum.POSTGRES;
 		}
-		
+
 	}
 
 	public String getHost() {
@@ -82,8 +84,13 @@ public class DataBaseConfigurationConnectionParameter {
 	public void setDataBase(DataBaseEnum dataBase) {
 		this.dataBase = dataBase;
 	}
-	
-	
 
+	public Integer getCloseConnection() {
+		return closeConnection;
+	}
+
+	public void setCloseConnection(Integer closeConnection) {
+		this.closeConnection = closeConnection;
+	}
 
 }

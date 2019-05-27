@@ -49,7 +49,7 @@ public abstract class DataBaseConfigurationConnection {
 		} finally {
 			Timer timer = new Timer();
 			AgendadorCloseConnection agendador = new AgendadorCloseConnection(con);
-			timer.schedule(agendador, 0, 30000);
+			timer.schedule(agendador, 0, parameterObject.getCloseConnection());
 		}
 	}
 
@@ -111,7 +111,7 @@ public abstract class DataBaseConfigurationConnection {
 		} finally {
 			Timer timer = new Timer();
 			CloseConnectionSearch agendador = new CloseConnectionSearch(st, rs);
-			timer.schedule(agendador, 0, 30000);
+			timer.schedule(agendador, 0, parameterObject.getCloseConnection());
 		}
 
 	}
