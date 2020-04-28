@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
-import framework.aurora.db.tools.LeituraXML;
+import framework.aurora.db.tools.XmlReader;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
 
@@ -35,7 +35,7 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 		}
 		
 		try {
-			return LeituraXML.returnConfurationXML(path);
+			return XmlReader.returnConfurationXML(path);
 		} catch (Exception e) {
 			System.out.println("Configuration not found!");
 			e.printStackTrace();

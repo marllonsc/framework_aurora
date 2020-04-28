@@ -9,7 +9,7 @@ import org.w3c.dom.Document;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
 
-public class LeituraXML {
+public class XmlReader {
 
 	public static DataBaseConfigurationConnectionParameter returnConfurationXML(String file) throws Exception {
 		File fXmlFile = new File(file);
