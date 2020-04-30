@@ -15,7 +15,7 @@ import framework.aurora.db.tools.MakeUrlDb;
 
 public abstract class DataBaseConfigurationConnection {
 
-	private static Connection con;
+	protected static Connection con;
 
 	private boolean checkconnection;
 
@@ -47,9 +47,7 @@ public abstract class DataBaseConfigurationConnection {
 			this.checkconnection = false;
 			System.out.println("Database Connection Error!");
 		} finally {
-			Timer timer = new Timer();
-			AgendadorCloseConnection agendador = new AgendadorCloseConnection(con);
-			timer.schedule(agendador, 0, parameterObject.getCloseConnection());
+
 		}
 	}
 
@@ -105,13 +103,15 @@ public abstract class DataBaseConfigurationConnection {
 			}
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
+
 			return rs;
 		} catch (Exception e) {
 			return null;
 		} finally {
-			Timer timer = new Timer();
-			CloseConnectionSearch agendador = new CloseConnectionSearch(st, rs);
-			timer.schedule(agendador, 0, parameterObject.getCloseConnection());
+
+			//Timer timer = new Timer();
+			//CloseConnectionSearch agendador = new CloseConnectionSearch(st, rs);
+			//timer.schedule(agendador, 0, parameterObject.getCloseConnection());
 		}
 
 	}

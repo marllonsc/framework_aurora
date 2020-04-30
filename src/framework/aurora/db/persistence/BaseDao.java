@@ -140,7 +140,18 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-			}
+			}finally {
+
+                try {
+                    if(super.con != null) {
+                        //st.close();
+                        super.con.close();
+                    }
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
+                }
+
+            }
 
 		} else {
 			return null;
@@ -214,7 +225,18 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 			} catch (SQLException e) {
 				e.printStackTrace();
-			} 
+			} finally {
+
+                try {
+                    if(super.con != null) {
+                        //st.close();
+                        super.con.close();
+                    }
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
+                }
+
+            }
 
 		} else {
 			return null;
@@ -357,7 +379,18 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-			} 
+			} finally {
+
+                try {
+                    if(super.con != null) {
+                        //st.close();
+                        super.con.close();
+                    }
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
+                }
+
+            }
 
 		} 
 		return o;
@@ -416,7 +449,18 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
-			}
+			}finally {
+
+                try {
+                    if(super.con != null) {
+                        //st.close();
+                        super.con.close();
+                    }
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
+                }
+
+            }
 
 		} else {
 			return null;
@@ -460,7 +504,18 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
+			} finally {
+
+                try {
+                    if(super.con != null) {
+                        //st.close();
+                        super.con.close();
+                    }
+                } catch (SQLException throwable) {
+                    throwable.printStackTrace();
+                }
+
+            }
 
 		} else {
 			return null;
