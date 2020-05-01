@@ -18,6 +18,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 	private Class<?> _clazz;
 
+	private boolean returnAll = false;
+
 	public BaseDao(Class<?> clazz) {
 		super();
 		this.setClassName(clazz.getSimpleName());
@@ -114,8 +116,12 @@ public class BaseDao<T> extends DataBaseConfiguration {
 		}
 
 		String sql = "SELECT " + atributos + " FROM " + pi.getName();
-		if (valores.length() > 6) {
+		if (valores.length() > 6 && !returnAll) {
 			sql = "SELECT " + atributos + " FROM " + pi.getName() + " " + valores;
+			returnAll = false;
+		} else if (returnAll){
+			sql = "SELECT " + atributos + " FROM " + pi.getName();
+			returnAll = false;
 		}
 		// System.out.println(sql);
 		ResultSet Dadosusuarios = executeSearchSQL(sql);
@@ -146,6 +152,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
                     if(super.con != null) {
                         //st.close();
                         super.con.close();
+                        super.checkconnection = false;
                     }
                 } catch (SQLException throwable) {
                     throwable.printStackTrace();
@@ -231,6 +238,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
                     if(super.con != null) {
                         //st.close();
                         super.con.close();
+						super.checkconnection = false;
                     }
                 } catch (SQLException throwable) {
                     throwable.printStackTrace();
@@ -385,6 +393,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
                     if(super.con != null) {
                         //st.close();
                         super.con.close();
+						super.checkconnection = false;
                     }
                 } catch (SQLException throwable) {
                     throwable.printStackTrace();
@@ -406,6 +415,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	}
 
 	public List<T> returnAll() {
+		this.returnAll = true;
 		return returnObjects(t);
 	}
 
@@ -455,6 +465,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
                     if(super.con != null) {
                         //st.close();
                         super.con.close();
+						super.checkconnection = false;
                     }
                 } catch (SQLException throwable) {
                     throwable.printStackTrace();
@@ -510,6 +521,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
                     if(super.con != null) {
                         //st.close();
                         super.con.close();
+						super.checkconnection = false;
                     }
                 } catch (SQLException throwable) {
                     throwable.printStackTrace();

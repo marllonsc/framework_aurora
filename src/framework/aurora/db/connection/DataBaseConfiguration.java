@@ -5,10 +5,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
+import framework.aurora.db.tools.LoggerHelper;
 import framework.aurora.db.tools.XmlReader;
 
 public abstract class DataBaseConfiguration extends DataBaseConfigurationConnection {
+
+	private static LoggerHelper loggerHelper = new LoggerHelper(DataBaseConfiguration.class.getName());
 
 	private static String path = "./src/DbConfiguration/dbInfoConexao.properties";
 
@@ -37,28 +42,10 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 		try {
 			return XmlReader.returnConfurationXML(path);
 		} catch (Exception e) {
-			System.out.println("Configuration not found!");
-			e.printStackTrace();
+			loggerHelper.warning("Configuration not found!");
+			loggerHelper.error(e.getMessage());
 			return new DataBaseConfigurationConnectionParameter();
 		}
-		
-
-//		try {
-//			FileReader gravador = new FileReader(path);
-//			BufferedReader entrada = new BufferedReader(gravador);
-//			List<String> valuesConf = new ArrayList<>();
-//
-//			String linha;
-//			while ((linha = entrada.readLine()) != null) {
-//				valuesConf.add(linha);
-//			}
-//			System.out.println("Configuration found!");
-//			entrada.close();
-//			return valuesConf;
-//		} catch (IOException e) {
-//			System.out.println("Configuration not found!");
-//			return null;
-//		}
 
 	}
 
@@ -98,7 +85,7 @@ public abstract class DataBaseConfiguration extends DataBaseConfigurationConnect
 				}
 
 			} else {
-				System.out.println(file.getAbsoluteFile() + "Permission Denied");
+				loggerHelper.warning(file.getAbsoluteFile() + "Permission Denied");
 			}
 		}
 		return null;

@@ -5,19 +5,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Timer;
 
 import framework.aurora.db.parameters.DataBaseConfigurationConnectionParameter;
-import framework.aurora.db.tools.AgendadorCloseConnection;
-import framework.aurora.db.tools.CloseConnectionSearch;
-import framework.aurora.db.tools.DataBaseEnum;
-import framework.aurora.db.tools.MakeUrlDb;
+import framework.aurora.db.tools.*;
 
 public abstract class DataBaseConfigurationConnection {
 
+	private static LoggerHelper loggerHelper = new LoggerHelper(DataBaseConfigurationConnection.class.getName());
+
 	protected static Connection con;
 
-	private boolean checkconnection;
+	protected boolean checkconnection;
 
 	public DataBaseConfigurationConnection(DataBaseConfigurationConnectionParameter parameterObject) {
 		createConnection(parameterObject);
@@ -43,9 +41,10 @@ public abstract class DataBaseConfigurationConnection {
 			con = DriverManager.getConnection(MakeUrlDb.geturldb(parameterObject), parameterObject.getUser(),
 					parameterObject.getPassword());
 			this.checkconnection = true;
+			loggerHelper.info("Database Connection Success!");
 		} catch (Exception e) {
 			this.checkconnection = false;
-			System.out.println("Database Connection Error!");
+			loggerHelper.error("Database Connection Error!");
 		} finally {
 
 		}
@@ -86,10 +85,13 @@ public abstract class DataBaseConfigurationConnection {
 			}
 			Statement st = con.createStatement();
 			st.execute(sql);
+			loggerHelper.info("SQL - " + sql);
 			st.close();
 			con.close();
+			this.checkconnection = false;
 		} catch (Exception e) {
 			result = false;
+			loggerHelper.error(e.getMessage());
 		}
 		return result;
 	}
@@ -103,15 +105,13 @@ public abstract class DataBaseConfigurationConnection {
 			}
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
-
+			loggerHelper.info("SQL - " + sql);
 			return rs;
 		} catch (Exception e) {
+			loggerHelper.error(e.getMessage());
 			return null;
 		} finally {
 
-			//Timer timer = new Timer();
-			//CloseConnectionSearch agendador = new CloseConnectionSearch(st, rs);
-			//timer.schedule(agendador, 0, parameterObject.getCloseConnection());
 		}
 
 	}
@@ -119,9 +119,11 @@ public abstract class DataBaseConfigurationConnection {
 	protected boolean setComitTrue() {
 		try {
 			con.setAutoCommit(true);
+			loggerHelper.info("Set commit True!");
 			con.commit();
 			return true;
 		} catch (SQLException e) {
+			loggerHelper.error(e.getMessage());
 			return false;
 		}
 
@@ -130,8 +132,10 @@ public abstract class DataBaseConfigurationConnection {
 	protected boolean setComitFalse() {
 		try {
 			con.setAutoCommit(false);
+			loggerHelper.info("Set commit false!");
 			return true;
 		} catch (SQLException e) {
+			loggerHelper.error(e.getMessage());
 			return false;
 		}
 
