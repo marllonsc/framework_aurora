@@ -73,7 +73,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 	@SuppressWarnings("unchecked")
 	public List<T> returnObjects(T objeto) {
-		String valores = "WHERE ";
+		String valores = "where ";
 		String atributos = "";
 		List<T> o = new ArrayList<T>();
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
@@ -89,7 +89,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals(null)
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals("")
 							&& (i != pi.getAtributos().size() - 2)) {
-						valores = valores + " AND ";
+						valores = valores + " and ";
 					}
 
 				}
@@ -106,8 +106,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				if (pi.returnValuesMethods(pi.getAtributos().elementAt(i)) != null
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals(null)
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals("")) {
-					if (!valores.equalsIgnoreCase("WHERE ")) {
-						valores = valores + " AND ";
+					if (!valores.equalsIgnoreCase("where ")) {
+						valores = valores + " and ";
 					}
 					valores = valores + pi.getAtributos().elementAt(i) + " = "
 							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
@@ -115,12 +115,12 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			}
 		}
 
-		String sql = "SELECT " + atributos + " FROM " + pi.getName();
+		String sql = "select " + atributos + " from " + pi.getName();
 		if (valores.length() > 6 && !returnAll) {
-			sql = "SELECT " + atributos + " FROM " + pi.getName() + " " + valores;
+			sql = "select " + atributos + " from " + pi.getName() + " " + valores;
 			returnAll = false;
 		} else if (returnAll){
-			sql = "SELECT " + atributos + " FROM " + pi.getName();
+			sql = "select " + atributos + " from " + pi.getName();
 			returnAll = false;
 		}
 		// System.out.println(sql);
@@ -169,7 +169,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 
 	@SuppressWarnings("unchecked")
 	public T returnObject(T objeto) {
-		String valores = "WHERE ";
+		String valores = "where ";
 		String atributos = "";
 		Object o = new Object();
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
@@ -185,7 +185,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals(null)
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals("")
 							&& (i != pi.getAtributos().size() - 2)) {
-						valores = valores + " AND ";
+						valores = valores + " and ";
 					}
 
 				}
@@ -202,8 +202,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				if (pi.returnValuesMethods(pi.getAtributos().elementAt(i)) != null
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals(null)
 						&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i)).equals("")) {
-					if (!valores.equalsIgnoreCase("WHERE ")) {
-						valores = valores + " AND ";
+					if (!valores.equalsIgnoreCase("where ")) {
+						valores = valores + " and ";
 					}
 					valores = valores + pi.getAtributos().elementAt(i) + " = "
 							+ pi.returnValuesMethods(pi.getAtributos().elementAt(i));
@@ -211,9 +211,9 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			}
 		}
 
-		String sql = "SELECT " + atributos + " FROM " + pi.getName();
+		String sql = "select " + atributos + " from " + pi.getName();
 		if (valores.length() > 6) {
-			sql = "SELECT " + atributos + " FROM " + pi.getName() + " " + valores;
+			sql = "select " + atributos + " from " + pi.getName() + " " + valores;
 		}
 		// System.out.println(sql);
 		ResultSet Dadosusuarios = executeSearchSQL(sql);
@@ -290,7 +290,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 						&& !pi2.returnValuesMethods(pi2.getAtributos().elementAt(i)).equals(null))
 						&& !pi2.returnValuesMethods(pi2.getAtributos().elementAt(i)).equals("")) {
 					if (!atributos.equalsIgnoreCase("")) {
-						atributos = atributos + " AND ";
+						atributos = atributos + " and ";
 					}
 					atributos = atributos + pi2.getAtributos().elementAt(i) + " = "
 							+ pi2.returnValuesMethods(pi.getAtributos().elementAt(i));
@@ -299,7 +299,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 				if (pi2.returnValuesMethods(pi2.getAtributos().elementAt(i)) != null
 						&& !pi2.returnValuesMethods(pi2.getAtributos().elementAt(i)).equals(null)) {
 					if (!atributos.equalsIgnoreCase("")) {
-						atributos = atributos + " AND ";
+						atributos = atributos + " and ";
 					}
 					atributos = atributos + pi2.getAtributos().elementAt(i) + " = "
 							+ pi2.returnValuesMethods(pi.getAtributos().elementAt(i));
@@ -307,13 +307,13 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			}
 		}
 
-		String sql = "UPDATE " + pi.getName() + " SET " + valores + " WHERE " + atributos;
+		String sql = "update " + pi.getName() + " set " + valores + " where " + atributos;
 		// System.out.println(sql);
 		return executeSQL(sql);
 	}
 
 	public Boolean deleteObject(T objeto) {
-		String valores = "WHERE ";
+		String valores = "where ";
 		String atributos = "";
 		GetClassInformationReflection pi = new GetClassInformationReflection(objeto);
 		for (int i = 0; i < pi.getAtributos().size(); i++) {
@@ -327,8 +327,8 @@ public class BaseDao<T> extends DataBaseConfiguration {
 					if (pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)) != null
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals(null)
 							&& !pi.returnValuesMethods(pi.getAtributos().elementAt(i + 1)).equals("")) {
-						if (!valores.equalsIgnoreCase("WHERE ")) {
-							valores = valores + " AND ";
+						if (!valores.equalsIgnoreCase("where ")) {
+							valores = valores + " and ";
 						}
 						valores = valores + "";
 					}
@@ -344,9 +344,9 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			}
 		}
 
-		String sql = "DELETE FROM " + pi.getName();
+		String sql = "delete from " + pi.getName();
 		if (valores.length() > 6) {
-			sql = "DELETE FROM " + pi.getName() + " " + valores;
+			sql = "delete from " + pi.getName() + " " + valores;
 		}
 		// System.out.println(sql);
 
@@ -423,7 +423,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	public List<T> returnObjects(String fields, String where) {
 
 		T objeto = ((T) new Object());
-		String valores = "WHERE ";
+		String valores = "where ";
 		String atributos = "";
 		List<T> o = new ArrayList<T>();
 
@@ -433,7 +433,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			fields = "*";
 		}
 
-		String sql = "SELECT " + fields + " FROM " + getClassName() + " ";
+		String sql = "select " + fields + " from " + getClassName() + " ";
 
 		if (StringUtils.isNotBlank(where)) {
 			sql = sql + valores + where;
@@ -484,7 +484,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	public T returnObject(String fields, String where) {
 
 		T objeto = ((T) new Object());
-		String valores = "WHERE ";
+		String valores = "where ";
 		String atributos = "";
 		T o = ((T) new Object());
 
@@ -494,7 +494,7 @@ public class BaseDao<T> extends DataBaseConfiguration {
 			fields = "*";
 		}
 
-		String sql = "SELECT " + fields + " FROM " + getClassName() + " ";
+		String sql = "select " + fields + " from " + getClassName() + " ";
 
 		if (StringUtils.isNotBlank(where)) {
 			sql = sql + valores + where;
@@ -538,17 +538,17 @@ public class BaseDao<T> extends DataBaseConfiguration {
 	}
 
 	public Boolean updateObject(String setFilds, String where) {
-		String sql = "UPDATE " + getClassName() + " SET " + setFilds;
+		String sql = "update " + getClassName() + " set " + setFilds;
 		if (StringUtils.isNotBlank(where)) {
-			sql = sql + " WHERE " + where;
+			sql = sql + " where " + where;
 		}
 		return sqlCommand(sql);
 	}
 
 	public Boolean deleteObject(String where) {
-		String sql = "DELETE FROM " + getClassName();
+		String sql = "delete from " + getClassName();
 		if (StringUtils.isNotBlank(where)) {
-			sql = sql + " WHERE " + where;
+			sql = sql + " where " + where;
 		}
 		return sqlCommand(sql);
 	}
